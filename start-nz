@@ -1,0 +1,32 @@
+#!/bin/bash
+#Goorm Nezha Dashboard connection Script
+#version 0.2
+goorm_user="goorm-nezha@vscwjm.eu.org"
+info_site="https://keep-info.run.goorm.io/"
+nezha_port="8082"		
+connection_str=$(curl -s "${info_site}${goorm_user}-port.txt" | \
+	grep ${nezha_port} | \
+	awk  -F ", \'" '{print $3}' | \
+	awk -F "\)" '{print $1}' | \
+	awk -F "'" '{print $1}')
+old_connection_str=""
+nezha_key="$1"
+nezha_path="/zn"
+if [ ! -f /zn ]; then
+        wget -O /zn https://om.wangjm.ml/E5_File/Tools/bin/nezha-agent-amd64_linux-upx
+    chmod a+x zn
+fi			
+while true
+do
+        if [ "${connection_str}" != "${old_connection_str}" ]; then
+                killall zn
+                ${nezha_path} -s ${connection_str} -p ${nezha_key}
+                old_connection_str=${connection_str}
+        fi
+        sleep 180
+        connection_str=$(curl -s "${info_site}${goorm_user}-port.txt" | \
+        	grep ${nezha_port} | \
+        	awk  -F ", \'" '{print $3}' | \
+        	awk -F "\)" '{print $1}' | \
+        	awk -F "'" '{print $1}')
+done
