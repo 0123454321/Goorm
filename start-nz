@@ -20,7 +20,7 @@ while true
 do
         if [ "${connection_str}" != "${old_connection_str}" ]; then
                 killall zn
-                ${nezha_path} -s ${connection_str} -p ${nezha_key}
+                ${nezha_path} -s ${connection_str} -p ${nezha_key} &
                 old_connection_str=${connection_str}
         fi
         sleep 180
