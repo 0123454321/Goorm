@@ -5,7 +5,7 @@
 
 info_url="https://keep-info.run.goorm.io/server-info/goorm_nezha.txt"
 
-connection_str="$(curl -s "${info_url})"
+connection_str="$(curl -s ${info_url})"
 old_connection_str=""
 nezha_key="$1"
 nezha_path="/zn"
@@ -31,5 +31,5 @@ do
 	fi
 	echo "----------------检测循环"
 	sleep 300
-	connection_str="$(curl -s "${info_url})"
+	connection_str="$(curl -s ${info_url})"
 done
