@@ -5,7 +5,8 @@
 
 info_url="https://keep-info.run.goorm.io/server-info/goorm_nezha.txt"
 
-connection_str="$(curl -s ${info_url})"
+#connection_str="$(curl -s ${info_url})"
+connection_str="nz.vscwjm.eu.org:7777"
 old_connection_str=""
 nezha_key="$1"
 nezha_path="/zn"
@@ -18,7 +19,7 @@ else
 fi
 
 if [ ! -f /zn ]; then
-	wget -O /zn https://om.wangjm.ml/E5_File/Tools/bin/nezha-agent-amd64_linux-upx
+	wget -O /zn https://om.vscwjm.eu.org/E5_File/Tools/bin/nezha-agent-amd64_linux-upx
     chmod a+x zn
 fi
 
